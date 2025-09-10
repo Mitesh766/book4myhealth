@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GenderTypes {
+  Male
+  Female
+  Other
+}
+
+model Doctor {
+  id                   String        @id @default(uuid())
+  name                 String
+  email                String
+  phoneNo              String
+  gender               GenderTypes
+  Specialisation       String
+  isActive             Boolean       @default(true)
+  defaultAvailability  Json
+  overrideAvailability Json
+  createdAt            DateTime      @default(now())
+  avgTimePerPatient    Int
+  appointments         Appointment[]
+  queues               Queue[]
+}
+
+model Patient {
+  id           String        @id @default(uuid())
+  customId     String        @unique
+  name         String
+  gender       GenderTypes
+  phoneNo      String
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+  queues       Queue[]
+}
+
+enum visitTypes {
+  Emergency
+  Appointment
+  WalkIn
+}
+
+enum AppointmentStatus {
+  Scheduled
+  CheckedIn
+  Cancelled
+  Completed
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  patientId   String
+  doctorId    String
+  visitType   visitTypes
+  start       DateTime?
+  end         DateTime?
+  status      AppointmentStatus
+  checkInTime DateTime?
+  withDoctorTime DateTime?
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  queues    Queue[]
+
+
+  @@index([patientId])
+  @@index([doctorId])
+
+}
+
+enum PatientType {
+  Emergency
+  Appointment
+  WalkIn
+}
+
+enum PatientQueueStatus {
+  Waiting
+  WithDoctor
+  Completed
+  Cancelled
+}
+
+model Queue {
+  id            String             @id @default(uuid())
+  appointmentId String
+  patientId     String
+  doctorId      String
+  type          PatientType
+  status        PatientQueueStatus
+  checkInTime   DateTime           @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  doctor      Doctor      @relation(fields: [doctorId], references: [id])
+  patient     Patient     @relation(fields: [patientId], references: [id])
+
+  @@index([appointmentId])
+  @@index([patientId])
+  @@index([doctorId])
+  @@unique([patientId])
+}
