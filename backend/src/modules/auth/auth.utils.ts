@@ -29,6 +29,8 @@ export const verifyAccessToken = (req: Request, res: Response, next: NextFunctio
 
 export const verifyRefreshToken = async (req: Request, res: Response, next: NextFunction): Promise<boolean> => {
     const refreshToken = req.cookies.refreshToken;
+   
+    console.log(refreshToken)
     if (!refreshToken) return false;
     try {
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as JwtPayload;
@@ -37,7 +39,7 @@ export const verifyRefreshToken = async (req: Request, res: Response, next: Next
         if (!userData || !userData.refreshToken || userData.refreshToken !== refreshToken) {
             return false;
         }
-
+     
         req.customUser = { id, role, clinicId };
         const accessToken = generateAccessToken(id, role, clinicId);
         const isProduction = process.env.NODE_ENV === "production"
@@ -53,6 +55,11 @@ export const verifyRefreshToken = async (req: Request, res: Response, next: Next
         return true;
     }
     catch (err) {
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV == "production",
+            sameSite: "strict"
+        })
         return false;
     }
 }
@@ -63,7 +70,7 @@ export const generateTokens = async (
     role: string,
     clinicId: string | null
 ): Promise<{ accessToken: string, refreshToken: string }> => {
-    const accessToken =  generateAccessToken(id, role, clinicId)
+    const accessToken = generateAccessToken(id, role, clinicId)
     const refreshToken = await generateRefreshToken(id, role, clinicId)
     return { accessToken, refreshToken }
 };

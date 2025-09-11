@@ -8,8 +8,8 @@ datasource db {
 }
 
 enum UserRole {
-  SuperAdmin
-  Admin
+  superAdmin
+  admin
 }
 
 model User {
@@ -30,10 +30,11 @@ model User {
 
 model Clinic {
   id              String @id @default(uuid())
-  name            String
+  name            String @unique
   address         String
-  patientIdPrefix String
+  patientIdPrefix String @unique
   lastSeq         Int    @default(0)
+  phoneNo         String @unique
 
   patients           Patient[]
   doctors            Doctor[]

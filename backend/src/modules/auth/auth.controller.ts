@@ -6,7 +6,7 @@ import { success } from "zod";
 export const login = asyncHandler(async (req, res) => {
     const { email, password } = loginSchema.parse(req.body);
 
-    const { accessToken, refreshToken } = await authService.login(email, password);
+    const { accessToken, refreshToken ,role} = await authService.login(email, password);
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -24,7 +24,8 @@ export const login = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
         success: true,
-        message: "Login successfull"
+        message: "Login successfull",
+        role
     })
 
 })

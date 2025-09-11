@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser"
 import session from "express-session"
 import passport from "passport"
 import authRouter from "./modules/auth/auth.routes"
+import clinicRouter from "./modules/clinic/clinic.routes"
+import userRouter from "./modules/user/user.routes"
 const app = express()
 
 app.use(cors({
@@ -17,6 +19,8 @@ app.use(cookieParser());
 
 
 app.use("/auth", authRouter)
+app.use("/clinic", clinicRouter)
+app.use("/user", userRouter)
 
 app.get("/", (req, res) => {
     res.send("Hello")
