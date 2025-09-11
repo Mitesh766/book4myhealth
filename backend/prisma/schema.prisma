@@ -7,6 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  SuperAdmin
+  Admin
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String
+  role         UserRole
+  phoneNo      String
+  refreshToken String?
+  clinicId     String?
+  clinic       Clinic?  @relation(fields: [clinicId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([email, clinicId])
+}
+
 model Clinic {
   id              String @id @default(uuid())
   name            String
@@ -18,23 +39,7 @@ model Clinic {
   doctors            Doctor[]
   appointments       Appointment[]
   appointmentHistory AppointmentHistory[]
-}
-
-enum UsrRole {
-  SuperAdmin
-  Admin
-}
-
-model User {
-  id       String   @id @default(uuid())
-  name     String
-  email    String   @unique
-  password String?
-  phoneNo  String?
-  refreshToken String?
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  users              User[]
 }
 
 enum GenderType {
