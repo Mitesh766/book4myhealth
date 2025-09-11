@@ -24,7 +24,7 @@ export function Login() {
   const { data: userLoggedInStatus } = useVerifyAuth();
   useEffect(() => {
     if (userLoggedInStatus?.success) {
-      navigate(`/`, { replace: true });
+      navigate(`/home`, { replace: true });
     }
   }, [userLoggedInStatus, navigate]);
 
@@ -33,7 +33,7 @@ export function Login() {
     onSuccess: () => {
       showNotification("success", ["Login successfull"]);
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 1000);
     },
     onError: (err: any) => {
