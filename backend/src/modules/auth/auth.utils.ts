@@ -30,7 +30,6 @@ export const verifyAccessToken = (req: Request, res: Response, next: NextFunctio
 export const verifyRefreshToken = async (req: Request, res: Response, next: NextFunction): Promise<boolean> => {
     const refreshToken = req.cookies.refreshToken;
    
-    console.log(refreshToken)
     if (!refreshToken) return false;
     try {
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as JwtPayload;

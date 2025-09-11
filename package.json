@@ -1,0 +1,24 @@
+{
+  "name": "book4myhealth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mitesh766/book4myhealth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mitesh766/book4myhealth/issues"
+  },
+  "homepage": "https://github.com/Mitesh766/book4myhealth#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

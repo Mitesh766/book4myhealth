@@ -1,7 +1,6 @@
 
 import { Request, Response, NextFunction } from "express";
-import { AppError } from "utils/AppError";
-import { success } from "zod";
+import { AppError } from "../utils/AppError";
 
 export const errorHandler = (
     err: any,
@@ -16,7 +15,7 @@ export const errorHandler = (
         });
     }
 
-    console.error("Unexpected Error:", err);
+   
     res.status(500).json({
         success: false,
         message: ["Internal Server Error"],
