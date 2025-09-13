@@ -1,6 +1,6 @@
 import express from "express"
 import { checkAuth, login,logout } from "./auth.controller"
-import { authenticateUser } from "./auth.middleware"
+import { authenticateUser, authoriseRole } from "./auth.middleware"
 
 const router  = express.Router()
 

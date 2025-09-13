@@ -8,7 +8,7 @@ export const authenticateUser = async (
 ) => {
     const isAccessTokenVerified = verifyAccessToken(req, res, next);
     if (isAccessTokenVerified) return;
-
+    
     const isRefreshTokenVerified = await verifyRefreshToken(req, res, next);
     if (isRefreshTokenVerified) return;
 
@@ -16,12 +16,12 @@ export const authenticateUser = async (
         success: false,
         message: "Authentication Required"
     })
-
 }
 
 
-export const authoriseRole = (role: string) => (req: Request, res: Response, next: NextFunction) => {
-    if (req?.customUser?.role === role) {
+export const authoriseRole = (role: string[]) => (req: Request, res: Response, next: NextFunction) => {
+    const customRole = req?.customUser?.role!
+    if (role.includes(customRole)) {
         next()
         return;
     }

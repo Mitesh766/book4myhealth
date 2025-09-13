@@ -16,18 +16,42 @@ const phoneNumberField = z
     .max(15, { error: "Phone number must contain 8-15 digits" })
     .regex(/^\+?\d+$/, { error: "Phone number must contain only digits" })
 
-const roleField = z.enum(["admin", "superAdmin"], { error: "Role can be wither of admin or super admin" })
+const roleField = z.enum(["admin", "superAdmin", "staff", "doctor"], { error: "Role can be any one of admin, superAdmin, staff, doctor" })
 
 const clinicIdField = z.uuid({
     error: "Invalid clinic id"
 })
 
+const IdField = z.uuid({error:"Please enter a valid ID"})
 export const addAdminSchema = z.object({
     name: nameField,
     email: emailField,
     password: passwordField,
     phoneNo: phoneNumberField,
-    role: roleField,
     clinicId: clinicIdField
-},{error:"Please fill all the details"})
+}, { error: "Please fill all the details" })
+
+export const addStaffMemberSchema = z.object({
+    name: nameField,
+    email: emailField,
+    password: passwordField,
+    phoneNo: phoneNumberField,
+})
+
+
+export const updateStaffMemberSchema = z.object({
+    id : IdField,
+    name: nameField,
+    email: emailField,
+    password: passwordField,
+    phoneNo: phoneNumberField,
+})
+
+export const deleteStaffMemberSchema = z.object({
+    id:IdField
+})
+
 export type AddAdminInput = z.infer<typeof addAdminSchema>;
+export type AddStaffMemberInput = z.infer<typeof addStaffMemberSchema>;
+export type UpdateStaffMemberInput = z.infer<typeof updateStaffMemberSchema>;
+export type DeleteStaffMemberInput = z.infer<typeof deleteStaffMemberSchema>;

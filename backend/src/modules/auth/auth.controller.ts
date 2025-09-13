@@ -1,12 +1,11 @@
 import asyncHandler from "../../utils/asyncHandler";
 import * as authService from "./auth.servcie"
 import { loginSchema } from "./auth.validation";
-import { success } from "zod";
 
 export const login = asyncHandler(async (req, res) => {
-    const { email, password } = loginSchema.parse(req.body);
-
-    const { accessToken, refreshToken ,role} = await authService.login(email, password);
+    const loginData= loginSchema.parse(req.body);
+    
+    const { accessToken, refreshToken ,role} = await authService.login(loginData);
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -50,3 +49,5 @@ export const logout = asyncHandler(async (req, res) => {
         sameSite: "strict"
     })
 })
+
+

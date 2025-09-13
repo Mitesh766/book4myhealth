@@ -7,90 +7,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model Clinic {
+  id              String @id @default(uuid())
+  name            String
+  address         String
+  patientIdPrefix String @unique
+  lastSeq         Int    @default(0)
+  phoneNo         String
+  email           String
+
+  createdAt DateTime @default(now())
+
+  users        User[]
+  patients     Patient[]
+  appointments Appointment[]
+}
+
 enum UserRole {
   superAdmin
   admin
+  doctor
+  staff
 }
 
 model User {
   id           String   @id @default(uuid())
   name         String
-  email        String   @unique
+  phoneNo      String
+  email        String
   password     String
   role         UserRole
-  phoneNo      String
   refreshToken String?
   clinicId     String?
-  clinic       Clinic?  @relation(fields: [clinicId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  clinic       Clinic?   @relation(fields: [clinicId], references: [id],onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  doctor    Doctor?
 
   @@unique([email, clinicId])
-}
-
-model Clinic {
-  id              String @id @default(uuid())
-  name            String @unique
-  address         String
-  patientIdPrefix String @unique
-  lastSeq         Int    @default(0)
-  phoneNo         String @unique
-
-  patients           Patient[]
-  doctors            Doctor[]
-  appointments       Appointment[]
-  appointmentHistory AppointmentHistory[]
-  users              User[]
+  @@index([clinicId])
 }
 
 enum GenderType {
-  MALE
-  FEMALE
-  OTHER
+  Male
+  Female
+  Other
 }
 
 model Doctor {
   id                   String     @id @default(uuid())
-  clinicId             String
-  name                 String
-  email                String
-  phoneNo              String
+  userId               String     @unique
+  user                 User       @relation(fields: [userId], references: [id],onDelete: Cascade)
   gender               GenderType
-  specialisation       String
   isActive             Boolean    @default(true)
-  defaultAvailability  Json
-  overrideAvailability Json
-  avgTimePerPatient    Int
-  createdAt            DateTime   @default(now())
-
-  clinic             Clinic               @relation(fields: [clinicId], references: [id])
-  appointments       Appointment[]
-  AppointmentHistory AppointmentHistory[]
+  specialisation       String
+  availability  Json
+  avgTimePerPatient    Int?
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+  @@index([userId])
 }
+
 
 model Patient {
   id        String     @id @default(uuid())
   clinicId  String
-  seq       Int
   customId  String
   name      String
   gender    GenderType
   phoneNo   String
   createdAt DateTime   @default(now())
 
-  clinic             Clinic               @relation(fields: [clinicId], references: [id])
-  appointments       Appointment[]
-  AppointmentHistory AppointmentHistory[]
+  clinic       Clinic        @relation(fields: [clinicId], references: [id],onDelete:Restrict)
+  appointments Appointment[]
+  reports      Report[]
 
-  @@unique([clinicId, seq])
   @@unique([clinicId, customId])
+  @@index([clinicId])
 }
+
 
 enum VisitType {
   Appointment
   Emergency
   WalkIn
 }
+
+
 
 enum AppointmentStatus {
   SCHEDULED
@@ -100,54 +105,51 @@ enum AppointmentStatus {
   CANCELLED
 }
 
+
 model Appointment {
   id             String            @id @default(uuid())
   clinicId       String
   patientId      String
   doctorId       String
   visitType      VisitType
-  priority       Int
   start          DateTime?
   end            DateTime?
   status         AppointmentStatus @default(SCHEDULED)
   checkInTime    DateTime?
   withDoctorTime DateTime?
+  completeTime   DateTime?
+  cancelTime     DateTime?
 
-  clinic  Clinic  @relation(fields: [clinicId], references: [id])
-  doctor  Doctor  @relation(fields: [doctorId], references: [id])
-  patient Patient @relation(fields: [patientId], references: [id])
+  clinic  Clinic  @relation(fields: [clinicId], references: [id],onDelete:Restrict)
+  patient Patient @relation(fields: [patientId], references: [id],onDelete:Restrict)
+  doctor  Doctor  @relation(fields: [doctorId], references: [id],onDelete:Restrict)
 
+  createdAt    DateTime       @default(now())
+  prescription Prescription[]
+  @@index([clinicId,patientId,doctorId])
+}
+
+model Prescription {
+  id            String      @id @default(uuid())
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id],onDelete:Restrict)
+  vitals        Json?
+  symptoms      String?
+  diagnosis     String?
+  medications   Json?
+  tests         Json?
+  advice        String?
+  followUpDate  DateTime?
+  createdAt     DateTime    @default(now())
+  @@index([appointmentId])
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  name      String
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id],onDelete:Restrict)
+  link      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
   @@index([patientId])
-  @@index([doctorId])
-  @@index([clinicId])
-}
-
-enum HistoryStatus {
-  Completed
-  Cancelled
-}
-
-model AppointmentHistory {
-  id             String        @id
-  patientId      String
-  doctorId       String
-  clinicId       String
-  visitType      VisitType
-  date           DateTime
-  startTime      DateTime?
-  endTime        DateTime?
-  status         HistoryStatus
-  checkInTime    DateTime?
-  withDoctorTime DateTime?
-  completedAt    DateTime?
-
-  patient Patient @relation(fields: [patientId], references: [id])
-  doctor  Doctor  @relation(fields: [doctorId], references: [id])
-  clinic  Clinic  @relation(fields: [clinicId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

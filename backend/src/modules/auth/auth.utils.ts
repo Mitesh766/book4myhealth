@@ -8,9 +8,6 @@ import { prisma } from "../../config/db"
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
-
-
-
 export const verifyAccessToken = (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) return false;

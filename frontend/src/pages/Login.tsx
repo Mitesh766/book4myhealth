@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, Heart } from "lucide-react";
 
-import { Notification } from "../components";
+import { Notification } from "../components/ui";
 import { useNotification } from "../hooks/useNotification";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../api/auth";

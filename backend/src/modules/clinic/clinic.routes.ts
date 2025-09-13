@@ -5,6 +5,6 @@ import { authenticateUser, authoriseRole } from "../auth/auth.middleware"
 const router = express.Router()
 
 
-router.route("/").post(authenticateUser, authoriseRole("superAdmin"), addClinic)
+router.route("/").post(authenticateUser, authoriseRole(["superAdmin"]), addClinic)
 
 export default router
