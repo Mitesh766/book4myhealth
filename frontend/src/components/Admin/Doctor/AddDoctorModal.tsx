@@ -1,44 +1,40 @@
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateDoctorDetails } from "../../api/doctor";
-import type { Doctor } from "../../types/doctor";
-import { useNotification } from "../../hooks/useNotification";
-import { Notification } from "../ui";
+import { addDoctor } from "../../../api/doctor";
+import type { Doctor } from "../../../types/doctor";
+import { useNotification } from "../../../hooks/useNotification";
+import { Notification } from "../../ui";
 
-interface UpdateDoctorDetailsProps {
-  formData: Omit<Doctor, "availability" | "userId">;
-  setFormData: React.Dispatch<
-    React.SetStateAction<Omit<Doctor, "availability" | "userId">>
-  >;
+interface AddDoctorModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: string;
 }
 
-export const UpdateDoctorDetailsModal = ({
-  formData,
-  setFormData,
-  setIsModalOpen,
-  userId,
-}: UpdateDoctorDetailsProps) => {
+export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phoneNo: "",
+    gender: "",
+    specialisation: "",
+    avgTimePerPatient: 20,
+  });
+
   const queryClient = useQueryClient();
 
   const { notification, showNotification, hideNotification } =
     useNotification();
 
-  const updateDoctorDetailsMutation = useMutation({
-    mutationFn: () => updateDoctorDetails({ ...formData, userId }),
+  const addDoctorDataMutation = useMutation({
+    mutationFn: () => addDoctor(formData),
     onSuccess: (newDoctor) => {
-      queryClient.setQueryData(["doctors"], (oldDoctors: Doctor[]) => {
-        return oldDoctors.map((doctor) =>
-          doctor.userId.toString() === newDoctor.userId.toString()
-            ? newDoctor
-            : doctor
-        );
-      });
-      showNotification("success", ["Doctor Data updated successfully"]);
-      setTimeout(()=>{
-
+      queryClient.setQueryData(["doctors"], (oldDoctors: Doctor[]) => [
+        ...oldDoctors,
+        newDoctor,
+      ]);
+      showNotification("success", ["Doctor Data added successfully"]);
+      setTimeout(() => {
         setIsModalOpen(false);
-      },1000)
+      }, 1000);
     },
     onError: (err: any) => {
       showNotification("error", err.response.data.message);
@@ -150,20 +146,6 @@ export const UpdateDoctorDetailsModal = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          checked={formData.isActive}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, isActive: e.target.checked }))
-          }
-          className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
-        />
-        <label className="text-sm font-medium text-gray-300">
-          Active Status
-        </label>
-      </div>
-
       <div className="flex gap-3 justify-end pt-4 border-t border-gray-700">
         <button
           onClick={() => setIsModalOpen(false)}
@@ -173,23 +155,23 @@ export const UpdateDoctorDetailsModal = ({
         </button>
 
         <button
-          onClick={() => updateDoctorDetailsMutation.mutate()}
-          disabled={updateDoctorDetailsMutation.isPending}
+          onClick={() => addDoctorDataMutation.mutate()}
+          disabled={addDoctorDataMutation.isPending}
           className={`px-6 cursor-pointer py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-colors
     ${
-      updateDoctorDetailsMutation.isPending
+      addDoctorDataMutation.isPending
         ? "bg-gray-400 cursor-not-allowed"
         : "bg-blue-600 hover:bg-blue-700"
     }
   `}
         >
-          {updateDoctorDetailsMutation.isPending ? (
+          {addDoctorDataMutation.isPending ? (
             <>
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              Updating...
+              Adding...
             </>
           ) : (
-            "Update Doctor"
+            "Add Doctor"
           )}
         </button>
       </div>

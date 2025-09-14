@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { getAllDoctors } from "../../api/doctor";
 import type { Doctor as DoctorType } from "../../types/doctor";
-import { useState }  from "react";
+import { useState } from "react";
 import { Loader, Modal, Notification } from "../../components/ui";
 import { useNotification } from "../../hooks/useNotification";
 import {

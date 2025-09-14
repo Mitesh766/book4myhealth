@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Doctor } from "../../types/doctor";
-import { updateDoctorAvailability } from "../../api/doctor";
+import type { Doctor } from "../../../types/doctor";
+import { updateDoctorAvailability } from "../../../api/doctor";
 
 const weekDays = [
   "monday",
@@ -31,7 +31,8 @@ export const DoctorAvailabilityModal = ({
 }: DoctorAvailabilityProps) => {
   const queryClient = useQueryClient();
   const updateAvailabilityMutation = useMutation({
-    mutationFn: () => updateDoctorAvailability({availability:availabilityData, userId }),
+    mutationFn: () =>
+      updateDoctorAvailability({ availability: availabilityData, userId }),
     onSuccess: (newDoctor) => {
       queryClient.setQueryData(["doctors"], (oldDoctors: Doctor[]) => {
         if (!oldDoctors) return [];
@@ -40,9 +41,11 @@ export const DoctorAvailabilityModal = ({
         );
       });
       showNotification("success", ["Doctor schedule updated successfully"]);
-      setIsOpen(false)
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 1000);
     },
-    onError: (err:any) => {
+    onError: (err: any) => {
       showNotification("error", err.response.data.message);
     },
   });
@@ -104,7 +107,7 @@ export const DoctorAvailabilityModal = ({
         </button>
         <button
           // onClick={() => handleSubmit("editAvailability")}
-          onClick={()=>updateAvailabilityMutation.mutate()}
+          onClick={() => updateAvailabilityMutation.mutate()}
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Update Availability

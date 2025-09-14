@@ -14,6 +14,13 @@ const genderField = z.enum(["Male", "Female", "Other"], { error: "Gender can be 
 
 const patientIdField = z.uuid({ error: "Invalid Patient Id" })
 
+const customIdField = z.string({ error: "Invalid Id" })
+    .trim()
+    .min(2, { error: "Patient ID prefix must be 2-8 characters" })
+    .max(8, { error: "Patient ID prefix must be 2-8 characters" })
+    .regex(/^[A-Za-z0-9]+$/, { error: "Patient ID prefix must contain only letters and digits (no spaces or symbols)" })
+    .transform(s => s.toUpperCase());
+
 export const addPatientSchema = z.object({
     name: nameField,
     phoneNo: phoneNumberField,
@@ -27,6 +34,18 @@ export const updatePatientSchema = z.object({
     phoneNo: phoneNumberField,
     address: addressField,
     gender: genderField,
+})
+
+export const getPatientByNameSchema = z.object({
+    name: nameField,
+})
+
+export const getPatientByCustomIdSchema = z.object({
+    customId: customIdField
+})
+
+export const getPatientByPhoneNumberSchema = z.object({
+    phoneNo: phoneNumberField
 })
 
 

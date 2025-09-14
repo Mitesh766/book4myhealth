@@ -11,7 +11,7 @@ router.route("/")
     .get(getAllPatients)
     .patch(updatePatient)
 
-router.route("/:id")
-    .delete(deletePatient)
+router.route("/:id").delete(deletePatient)
+
 
 export default router

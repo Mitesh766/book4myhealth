@@ -1,22 +1,20 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addDoctor } from "../../api/doctor";
-import type { Doctor } from "../../types/doctor";
-import { useNotification } from "../../hooks/useNotification";
-import { Notification } from "../ui";
+import type { PatientResponse } from "../../../types/patient";
+import { useNotification } from "../../../hooks/useNotification";
+import { Notification } from "../../ui";
+import { addPatient } from "../../../api/patient";
 
-interface AddDoctorModalProps {
+interface AddPatientModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
+export const AddPatientModal = ({ setIsModalOpen }: AddPatientModalProps) => {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phoneNo: "",
     gender: "",
-    specialisation: "",
-    avgTimePerPatient: 20,
+    address: "",
   });
 
   const queryClient = useQueryClient();
@@ -24,14 +22,14 @@ export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
   const { notification, showNotification, hideNotification } =
     useNotification();
 
-  const addDoctorDataMutation = useMutation({
-    mutationFn: () => addDoctor(formData),
-    onSuccess: (newDoctor) => {
-      queryClient.setQueryData(["doctors"], (oldDoctors: Doctor[]) => [
-        ...oldDoctors,
-        newDoctor,
-      ]);
-      showNotification("success", ["Doctor Data added successfully"]);
+  const addPatientDataMutation = useMutation({
+    mutationFn: () => addPatient(formData),
+    onSuccess: (newPatient) => {
+      queryClient.setQueryData(
+        ["patients"],
+        (oldPatients: PatientResponse[]) => [...oldPatients, newPatient]
+      );
+      showNotification("success", ["Patient Data added successfully"]);
       setTimeout(() => {
         setIsModalOpen(false);
       }, 1000);
@@ -52,7 +50,7 @@ export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
-            Doctor Name
+            Patient Name
           </label>
           <input
             type="text"
@@ -61,23 +59,10 @@ export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
               setFormData((prev) => ({ ...prev, name: e.target.value }))
             }
             className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter doctor name"
+            placeholder="Enter patient name"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, email: e.target.value }))
-            }
-            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter email"
-          />
-        </div>
+       
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Phone Number
@@ -109,41 +94,23 @@ export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
             <option value="Other">Other</option>
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Specialisation
-          </label>
-          <input
-            type="text"
-            value={formData.specialisation}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                specialisation: e.target.value,
-              }))
-            }
-            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="e.g., Cardiology, ENT"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Avg Time Per Patient (mins)
-          </label>
-          <input
-            type="number"
-            value={formData.avgTimePerPatient}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                avgTimePerPatient: parseInt(e.target.value) || 0,
-              }))
-            }
-            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            min="1"
-            max="120"
-          />
-        </div>
+      </div>
+      <div className="w-full">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Address
+        </label>
+        <input
+          type="text"
+          value={formData.address}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              address: e.target.value,
+            }))
+          }
+          className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Enter Address"
+        />
       </div>
 
       <div className="flex gap-3 justify-end pt-4 border-t border-gray-700">
@@ -155,23 +122,23 @@ export const AddDoctorModal = ({ setIsModalOpen }: AddDoctorModalProps) => {
         </button>
 
         <button
-          onClick={() => addDoctorDataMutation.mutate()}
-          disabled={addDoctorDataMutation.isPending}
+          onClick={() => addPatientDataMutation.mutate()}
+          disabled={addPatientDataMutation.isPending}
           className={`px-6 cursor-pointer py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-colors
     ${
-      addDoctorDataMutation.isPending
+      addPatientDataMutation.isPending
         ? "bg-gray-400 cursor-not-allowed"
         : "bg-blue-600 hover:bg-blue-700"
     }
   `}
         >
-          {addDoctorDataMutation.isPending ? (
+          {addPatientDataMutation.isPending ? (
             <>
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
               Adding...
             </>
           ) : (
-            "Add Doctor"
+            "Add Patient"
           )}
         </button>
       </div>

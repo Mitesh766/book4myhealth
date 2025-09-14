@@ -1,8 +1,8 @@
 import React from "react";
-import { ConfirmationModal } from "../ui/ConfirmationModal";
+import { ConfirmationModal } from "../../ui/ConfirmationModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteDoctor } from "../../api/doctor";
-import type { Doctor } from "../../types/doctor";
+import { deleteDoctor } from "../../../api/doctor";
+import type { Doctor } from "../../../types/doctor";
 
 interface DeleteConfirmationProps {
   isOpen: boolean;

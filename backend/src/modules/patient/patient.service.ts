@@ -43,12 +43,46 @@ export const updatePatient = async (patientInputData: UpdatePatientInput, clinic
     return patientData
 }
 
-export const deletePatient = async (id:string,clinicId:string)=>{
+export const deletePatient = async (id: string, clinicId: string) => {
     await prisma.patient.delete({
-        where:{
+        where: {
             id,
             clinicId
         }
     })
     return;
+}
+
+
+
+export const getPatientByName = async (name: string, clinicId: string) => {
+    const patientData = await prisma.patient.findMany({
+        where: {
+            clinicId,
+            name: {
+                contains: name,
+                mode: "insensitive"
+            }
+        }
+    })
+
+    return patientData;
+}
+
+export const getPatientByCustomId = async (customId: string, clinicId: string) => {
+    const patientData = await prisma.patient.findMany({
+        where: {
+            customId, clinicId
+        }
+    })
+    return patientData;
+}
+
+export const getPatientByPhoneNumber = async (clinicId: string, phoneNo: string) => {
+    const patientData = await prisma.patient.findMany({
+        where: {
+            clinicId, phoneNo
+        }
+    })
+    return patientData;
 }
