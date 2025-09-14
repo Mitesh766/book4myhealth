@@ -5,7 +5,6 @@ import {
   AdminLayout,
   Appointments,
   Doctor,
-  Doctor2,
   Patient,
   Prescription,
 } from "./pages/Admin";
@@ -21,9 +20,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />
 
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="doctor" element={<Doctor />} />
-            <Route path="doctor2" element={<Doctor2 />} />
             <Route path="patient" element={<Patient />} />
+            <Route path="doctor" element={<Doctor />} />
             <Route path="appointments" element={<Appointments />} />
             <Route path="prescription" element={<Prescription />} />
           </Route>

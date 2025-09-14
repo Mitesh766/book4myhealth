@@ -1,6 +1,5 @@
 export { AdminLayout } from "./AdminLayout"
-export { Doctor } from "./Doctor"
-export { Doctor2 } from "./Doctor2"
+export {Doctor} from "./Doctor"
 export { Patient } from "./Patient"
 export { Appointments } from "./Appointments"
 export {Prescription} from "./Prescription"

@@ -18,8 +18,8 @@ const averageTimePerPatientField = z.number({ error: "Please enter a number (1-6
 const genderField = z.enum(["Male", "Female", "Other"])
 
 const dailyAvailabilitySchema = z.object({
-    start: z.string().regex(/^\d{2}:\d{2}$/, "Start time must be HH:MM"),
-    end: z.string().regex(/^\d{2}:\d{2}$/, "End time must be HH:MM")
+    start: z.string().trim().regex(/^\d{2}:\d{2}$/, "Start time must be HH:MM"),
+    end: z.string().trim().regex(/^\d{2}:\d{2}$/, "End time must be HH:MM")
 }).refine(({start,end})=>start>=end,{error:"Start time must be earlier then end time"});
 
 const userIdField = z.uuid({ error: "Invalid doctor Id" })
