@@ -78,6 +78,7 @@ model Patient {
   name      String
   gender    GenderType
   phoneNo   String
+  address   String
   createdAt DateTime   @default(now())
 
   clinic       Clinic        @relation(fields: [clinicId], references: [id],onDelete:Restrict)

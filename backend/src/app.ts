@@ -6,6 +6,8 @@ import authRouter from "./modules/auth/auth.routes"
 import clinicRouter from "./modules/clinic/clinic.routes"
 import userRouter from "./modules/user/user.routes"
 import doctorRouter from "./modules/doctor/doctor.routes"
+import patientRouter from "./modules/patient/patient.routes"
+
 const app = express()
 
 app.use(cors({
@@ -22,6 +24,8 @@ app.use("/auth", authRouter)
 app.use("/clinic", clinicRouter)
 app.use("/user", userRouter)
 app.use("/doctor", doctorRouter)
+app.use("/patient",patientRouter)
+
 
 app.get("/", (req, res) => {
     res.send("Hello")
