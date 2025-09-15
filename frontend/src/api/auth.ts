@@ -9,3 +9,8 @@ export const verifyAuth = async()=>{
     const response = await axiosClient.get("/auth/checkAuth");
     return response.data 
 }
+
+export const logout = async()=>{
+    const response = await axiosClient.post("/auth/logout");
+    return response;
+}

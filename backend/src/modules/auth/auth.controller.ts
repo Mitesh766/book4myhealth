@@ -48,6 +48,11 @@ export const logout = asyncHandler(async (req, res) => {
         secure: process.env.NODE_ENV == "production",
         sameSite: "strict"
     })
+
+    res.json({
+        success:true,
+        message:"Logged out successfully"
+    })
 })
 
 

@@ -1,8 +1,10 @@
-import { ChevronRight, Eye, User, User2 } from "lucide-react";
+import { ChevronRight, Eye, Stethoscope, User, User2 } from "lucide-react";
 import { getAllDoctorsCurrentStatus } from "../../api/doctor";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Loader } from "../../components/ui";
+import { Loader, Notification } from "../../components/ui";
+import { logout } from "../../api/auth";
+import { useNotification } from "../../hooks/useNotification";
 
 const FrontDesk = () => {
   const { data: doctorData, isLoading } = useQuery({
@@ -11,18 +13,50 @@ const FrontDesk = () => {
     staleTime: 1000 * 60 * 60,
     gcTime: 1000 * 60 * 60,
   });
-
+  const { notification, showNotification, hideNotification } =
+    useNotification();
   const navigate = useNavigate();
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      showNotification("success", ["Logout successfull"]);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    },
+    onError: () => {
+      showNotification("error", ["Something went wrong"]);
+    },
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br bg-slate-950 p-6 px-15">
+      <Notification
+        type={notification.type}
+        messages={notification.messages}
+        onClose={hideNotification}
+        isVisible={notification.isVisible}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+        <div className="mb-8 flex justify-between items-center">
+          <h1 className="text-xl sm:text-4xl font-bold text-white mb-2">
             Clinic Front Desk
           </h1>
-          <p className="text-gray-400 text-lg"></p>
+          <button
+            onClick={() => logoutMutation.mutate()}
+            disabled={logoutMutation.isPending}
+            className={`text-white cursor-pointer  transition-all hover:bg-slate-800 text-lg font-bold border-2 px-3 py-1 rounded-2xl`}
+          >
+            {logoutMutation.isPending ? (
+              <>
+                <span className="inline-block mr-2 h-4 w-4  border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                Logging out...
+              </>
+            ) : (
+              "Logout"
+            )}
+          </button>
         </div>
 
         <div className="flex space-x-1 mb-8 bg-gray-800/30 p-1 rounded-xl border border-gray-700/50 backdrop-blur-sm">
@@ -36,6 +70,15 @@ const FrontDesk = () => {
           </button>
         </div>
 
+        {doctorData && doctorData?.length === 0 && (
+          <div className="text-center">
+            <div className="text-gray-500 relative top-40">
+              <Stethoscope className="w-16 h-16 mx-auto mb-4" />
+              <h3 className="text-xl font-medium mb-2">No doctors found</h3>
+              <p>Add your first doctor to get started</p>
+            </div>
+          </div>
+        )}
         {/* Doctors Section */}
 
         {isLoading ? (
