@@ -1,5 +1,5 @@
 import express from "express"
-import { addDoctor, deleteDoctor, getAllClinicDoctors, updateDoctorAvailability, updateDoctorProfile } from "./doctor.controller"
+import { addDoctor, deleteDoctor, getAllClinicDoctors, getAllDoctorsCurrentStatus, updateDoctorAvailability, updateDoctorProfile } from "./doctor.controller"
 import { authenticateUser, authoriseRole } from "../auth/auth.middleware"
 
 const router = express.Router()
@@ -11,4 +11,7 @@ router.route("/")
 
 router.route(`/:userId`).delete(authenticateUser,authoriseRole(["admin"]),deleteDoctor)
 router.route("/availability").patch(authenticateUser, authoriseRole(["admin"]), updateDoctorAvailability)
+
+
+router.route("/current-status").get(getAllDoctorsCurrentStatus);
 export default router

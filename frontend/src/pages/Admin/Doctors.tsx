@@ -21,7 +21,7 @@ import {
   AddDoctorModal,
 } from "../../components/Admin";
 
-export const Doctor = () => {
+export const Doctors = () => {
   const { data: doctorData, isLoading: isDoctorDataLoading } = useQuery({
     queryKey: ["doctors"],
     queryFn: getAllDoctors,

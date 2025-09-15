@@ -33,7 +33,7 @@ export function Login() {
     onSuccess: () => {
       showNotification("success", ["Login successfull"]);
       setTimeout(() => {
-        navigate("/home");
+        navigate("/admin/frontdesk");
       }, 1000);
     },
     onError: (err: any) => {
@@ -110,6 +110,7 @@ export function Login() {
                     className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 hover:bg-white/10"
                     placeholder="Enter your email"
                     required
+                    autoComplete="off"
                   />
                 </div>
               </div>

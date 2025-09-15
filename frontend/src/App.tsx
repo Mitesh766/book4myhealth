@@ -1,13 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { Home, Login } from "./pages";
+import { Login } from "./pages";
 import {
+  AddAppointment,
   AdminLayout,
   Appointments,
-  Doctor,
-  Patient,
-  Prescription,
+  Doctors,
+  Patients,
 } from "./pages/Admin";
+import FrontDesk from "./pages/Admin/FrontDesk";
 
 const queryClient = new QueryClient();
 const App = () => {
@@ -16,14 +17,13 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to={"/login"} />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="patient" element={<Patient />} />
-            <Route path="doctor" element={<Doctor />} />
+            <Route path="frontdesk" element={<FrontDesk />} />
+            <Route path="patients" element={<Patients />} />
+            <Route path="doctors" element={<Doctors />} />
             <Route path="appointments" element={<Appointments />} />
-            <Route path="prescription" element={<Prescription />} />
+            <Route path="add-appointment" element={<AddAppointment />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -65,3 +65,13 @@ export const deleteDoctor = asyncHandler(async (req, res) => {
     })
 
 })
+
+export const getAllDoctorsCurrentStatus = asyncHandler(async (req, res) => {
+    const clinicId = req.customUser?.clinicId!;
+    const doctorStatusData = await doctorService.getAllDoctorsCurrentStatus(clinicId);
+    return res.status(200).json({
+        success: true,
+        doctorStatusData
+    })
+})
+

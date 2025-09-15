@@ -1,6 +1,7 @@
 import { AddDoctorInput, UpdateDoctorAvailabilityInput, UpdateDoctorProfileInput } from "./doctor.validations";
 import { prisma } from "../../config/db"
 import { hashPassword } from "../user/user.utils";
+import { isDoctorAvailable } from "./doctor.utils";
 
 
 export const addDoctor = async (doctorInputData: AddDoctorInput, clinicId: string) => {
@@ -163,4 +164,58 @@ export const deleteDoctor = async (userId: string, clinicId: string) => {
     })
 
     return
+}
+
+export const getAllDoctorsCurrentStatus = async (clinicId: string) => {
+    const data = await prisma.doctor.findMany({
+        where: {
+            user: {
+                clinicId,
+            },
+            isActive: true
+        },
+        select: {
+            userId: true,
+            specialisation: true,
+            availability: true,
+            user: {
+                select: {
+                    name: true,
+                }
+            }
+        }
+    })
+
+    const doctorData = data.map((doctor) => {
+        const doctorStatus = isDoctorAvailable(doctor.availability as Record<"string", { start: string, end: string }>)
+        return ({ ...doctor, name: doctor.user.name, user: undefined, availability: undefined, available: doctorStatus, doctorId: doctor.userId, userId: undefined })
+    })
+
+    return doctorData;
+}
+
+export const getGivenDoctorDetails = async (doctorId: string, clinicId: string) => {
+    const doctorDetails = await prisma.doctor.findFirst({
+        where: {
+            user: {
+                clinicId,
+            },
+            userId: doctorId,
+        },
+        select: {
+            userId: true,
+            specialisation: true,
+            availability: true,
+            user: {
+                select: {
+                    name: true,
+                }
+            }
+        }
+    })
+
+    if(!doctorDetails) return {}
+    const doctorStatus = isDoctorAvailable(doctorDetails.availability as Record<"string", { start: string, end: string }>)
+    return ({ ...doctorDetails, name: doctorDetails.user.name, user: undefined, availability: undefined, available: doctorStatus, doctorId: doctorDetails.userId, userId: undefined })
+
 }

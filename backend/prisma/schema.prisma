@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Clinic {
   id              String @id @default(uuid())
   name            String
@@ -40,7 +39,7 @@ model User {
   role         UserRole
   refreshToken String?
   clinicId     String?
-  clinic       Clinic?   @relation(fields: [clinicId], references: [id],onDelete: Restrict)
+  clinic       Clinic?  @relation(fields: [clinicId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,19 +56,19 @@ enum GenderType {
 }
 
 model Doctor {
-  id                   String     @id @default(uuid())
-  userId               String     @unique
-  user                 User       @relation(fields: [userId], references: [id],onDelete: Cascade)
-  gender               GenderType
-  isActive             Boolean    @default(true)
-  specialisation       String
-  availability  Json
-  avgTimePerPatient    Int?
-  createdAt    DateTime      @default(now())
-  appointments Appointment[]
+  id                String        @id @default(uuid())
+  userId            String        @unique
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender            GenderType
+  isActive          Boolean       @default(true)
+  specialisation    String
+  availability      Json
+  avgTimePerPatient Int?
+  createdAt         DateTime      @default(now())
+  appointments      Appointment[]
+
   @@index([userId])
 }
-
 
 model Patient {
   id        String     @id @default(uuid())
@@ -81,7 +80,7 @@ model Patient {
   address   String
   createdAt DateTime   @default(now())
 
-  clinic       Clinic        @relation(fields: [clinicId], references: [id],onDelete:Restrict)
+  clinic       Clinic        @relation(fields: [clinicId], references: [id], onDelete: Restrict)
   appointments Appointment[]
   reports      Report[]
 
@@ -89,14 +88,11 @@ model Patient {
   @@index([clinicId])
 }
 
-
 enum VisitType {
   Appointment
   Emergency
   WalkIn
 }
-
-
 
 enum AppointmentStatus {
   SCHEDULED
@@ -105,7 +101,6 @@ enum AppointmentStatus {
   COMPLETED
   CANCELLED
 }
-
 
 model Appointment {
   id             String            @id @default(uuid())
@@ -120,20 +115,21 @@ model Appointment {
   withDoctorTime DateTime?
   completeTime   DateTime?
   cancelTime     DateTime?
-
-  clinic  Clinic  @relation(fields: [clinicId], references: [id],onDelete:Restrict)
-  patient Patient @relation(fields: [patientId], references: [id],onDelete:Restrict)
-  doctor  Doctor  @relation(fields: [doctorId], references: [id],onDelete:Restrict)
+  
+  clinic  Clinic  @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  doctor  Doctor  @relation(fields: [doctorId], references: [userId], onDelete: Restrict)
 
   createdAt    DateTime       @default(now())
   prescription Prescription[]
-  @@index([clinicId,patientId,doctorId])
+
+  @@index([clinicId, patientId, doctorId])
 }
 
 model Prescription {
   id            String      @id @default(uuid())
   appointmentId String
-  appointment   Appointment @relation(fields: [appointmentId], references: [id],onDelete:Restrict)
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Restrict)
   vitals        Json?
   symptoms      String?
   diagnosis     String?
@@ -142,6 +138,7 @@ model Prescription {
   advice        String?
   followUpDate  DateTime?
   createdAt     DateTime    @default(now())
+
   @@index([appointmentId])
 }
 
@@ -149,8 +146,9 @@ model Report {
   id        String   @id @default(uuid())
   name      String
   patientId String
-  patient   Patient  @relation(fields: [patientId], references: [id],onDelete:Restrict)
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Restrict)
   link      String
   createdAt DateTime @default(now())
+
   @@index([patientId])
 }

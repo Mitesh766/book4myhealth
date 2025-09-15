@@ -1,8 +1,9 @@
 import {
-  BarChart3,
+
   Calendar,
-  Clock,
-  FileText,
+
+  Computer,
+
   UserCheck,
   Users,
 } from "lucide-react";
@@ -26,24 +27,20 @@ export const AdminLayout = () => {
 
   const sidebarOptions: SidebarOption[] = [
     {
-      label: "Appointments",
-      path: "/appointments",
+      label: "FrontDesk",
+      path: "frontdesk",
+      icon: <Computer size={18} />,
+    },
+
+    { label: "Patients", path: "patients", icon: <Users size={18} /> },
+    { label: "Doctors", path: "doctors", icon: <UserCheck size={18} /> },
+    {
+      label: "Add Appointment",
+      path: "add-appointment",
       icon: <Calendar size={18} />,
     },
-    { label: "Patients", path: "/patients", icon: <Users size={18} /> },
-    { label: "Doctors", path: "/doctors", icon: <UserCheck size={18} /> },
-    {
-      label: "Prescriptions",
-      path: "/prescriptions",
-      icon: <FileText size={18} />,
-    },
-    { label: "Reports", path: "/reports", icon: <BarChart3 size={18} /> },
-    { label: "Analytics", path: "/analytics", icon: <BarChart3 size={18} /> },
-    {
-      label: "Appointment History",
-      path: "/history",
-      icon: <Clock size={18} />,
-    },
+    
+  
   ];
   return (
     <div>

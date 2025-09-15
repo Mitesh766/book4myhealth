@@ -20,7 +20,15 @@ const genderField = z.enum(["Male", "Female", "Other"])
 const dailyAvailabilitySchema = z.object({
     start: z.string().trim().regex(/^\d{2}:\d{2}$/, "Start time must be HH:MM"),
     end: z.string().trim().regex(/^\d{2}:\d{2}$/, "End time must be HH:MM")
-}).refine(({start,end})=>start>=end,{error:"Start time must be earlier then end time"});
+}).refine(({start,end})=>{
+    const [sh, sm] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+
+  const startMinutes = sh * 60 + sm;
+  const endMinutes = eh * 60 + em;
+
+  return startMinutes < endMinutes;
+},{error:"Start time must be earlier then end time"});
 
 const userIdField = z.uuid({ error: "Invalid doctor Id" })
 
@@ -70,6 +78,8 @@ export const updateDoctorAvailabilitySchema = z.object({
     userId: userIdField,
     availability: availabilitySchema,
 })
+
+
 
 export type AddDoctorInput = z.infer<typeof addDoctorSchema>;
 export type UpdateDoctorProfileInput = z.infer<typeof updateDoctorProfileSchema>

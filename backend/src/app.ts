@@ -7,7 +7,8 @@ import clinicRouter from "./modules/clinic/clinic.routes"
 import userRouter from "./modules/user/user.routes"
 import doctorRouter from "./modules/doctor/doctor.routes"
 import patientRouter from "./modules/patient/patient.routes"
-
+import appointmentRouter from "./modules/appointment/appointment.routes"
+import moment from "moment-timezone"
 const app = express()
 
 app.use(cors({
@@ -25,6 +26,7 @@ app.use("/clinic", clinicRouter)
 app.use("/user", userRouter)
 app.use("/doctor", doctorRouter)
 app.use("/patient",patientRouter)
+app.use("/appointments",appointmentRouter)
 
 
 app.get("/", (req, res) => {

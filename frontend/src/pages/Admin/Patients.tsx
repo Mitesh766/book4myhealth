@@ -13,7 +13,7 @@ import {
 import { getAllPateints } from "../../api/patient";
 import { AxiosError } from "axios";
 
-export const Patient = () => {
+export const Patients = () => {
   const { showNotification, notification, hideNotification } =
     useNotification();
 
