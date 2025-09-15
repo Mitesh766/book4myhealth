@@ -4,13 +4,15 @@ import { authenticateUser, authoriseRole } from "../auth/auth.middleware"
 
 const router = express.Router()
 
-router.route("/")
-    .post(authenticateUser, authoriseRole(['admin']), addDoctor)
-    .patch(authenticateUser, authoriseRole(["admin"]), updateDoctorProfile)
-    .get(authenticateUser, authoriseRole(["admin"]), getAllClinicDoctors)
+router.use(authenticateUser, authoriseRole(['admin']))
 
-router.route(`/:userId`).delete(authenticateUser,authoriseRole(["admin"]),deleteDoctor)
-router.route("/availability").patch(authenticateUser, authoriseRole(["admin"]), updateDoctorAvailability)
+router.route("/")
+    .post(addDoctor)
+    .patch( updateDoctorProfile)
+    .get(getAllClinicDoctors)
+
+router.route(`/:userId`).delete(deleteDoctor)
+router.route("/availability").patch(updateDoctorAvailability)
 
 
 router.route("/current-status").get(getAllDoctorsCurrentStatus);

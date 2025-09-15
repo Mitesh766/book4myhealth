@@ -185,6 +185,7 @@ export const getAllDoctorsCurrentStatus = async (clinicId: string) => {
             }
         }
     })
+    
 
     const doctorData = data.map((doctor) => {
         const doctorStatus = isDoctorAvailable(doctor.availability as Record<"string", { start: string, end: string }>)
