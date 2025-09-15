@@ -2,7 +2,6 @@ import axiosClient from "./axiosClient"
 
 export const getAllAppointments = async () => {
     const response = await axiosClient.get("/appointments");
-    // console.log(re)
     return response.data.appointmentData
 }
 
@@ -13,7 +12,6 @@ export const getAllDoctorsCurrentStatus = async () => {
 
 export const getAllAppointmentsDoctorWise = async (doctorId: string) => {
     const response = await axiosClient.get(`/appointments/${doctorId}`)
-    console.log(response)
     return response.data.appointmentData
 }
 

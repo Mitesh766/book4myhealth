@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Calendar, Clock, User, UserCheck, AlertTriangle } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllDoctors } from "../../api/doctor";
 import { createAppointment } from "../../api/appointment";
 import { Notification } from "../../components/ui";
@@ -14,10 +14,14 @@ export const AddAppointment = () => {
     gcTime: 1000 * 60 * 60,
   });
 
+  const queryClient = useQueryClient();
   const createAppointmentMutation = useMutation({
     mutationFn: () => createAppointment(appointment),
     onSuccess: () => {
       showNotification("success", ["Appointment added successfully"]);
+      queryClient.invalidateQueries({
+        queryKey: ["appointments", appointment.doctorId],
+      });
       setAppointment({
         patientCustomId: "",
         doctorId: "",
@@ -39,8 +43,6 @@ export const AddAppointment = () => {
     start: "null",
     end: "",
   });
-
-  // Mock doctors data
 
   const visitTypes = ["Appointment", "Emergency", "WalkIn"];
   const appointmentStatuses = ["SCHEDULED", "CHECKED_IN"];
@@ -79,10 +81,6 @@ export const AddAppointment = () => {
       hour12: true,
     });
   };
-
- 
-
- 
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -299,8 +297,18 @@ export const AddAppointment = () => {
             onClick={handleSubmit}
             className="px-6 py-2 cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
           >
-            <UserCheck className="w-4 h-4" />
-            Save Appointment
+            {createAppointmentMutation.isPending ? (
+              <>
+                <span className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                Adding Appointment...
+              </>
+            ) : (
+              <>
+                {" "}
+                <UserCheck className="w-4 h-4" />
+                Add Appointment
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -326,9 +334,7 @@ export const AddAppointment = () => {
             <div>
               <p>
                 <strong>Status:</strong>
-                <span
-                  className={`ml-2 px-2 py-1 text-xs rounded-full`}
-                >
+                <span className={`ml-2 px-2 py-1 text-xs rounded-full`}>
                   {appointment.status.replace("_", " ")}
                 </span>
               </p>

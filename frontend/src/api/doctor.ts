@@ -28,6 +28,5 @@ export const deleteDoctor = async (doctorId: string) => {
 
 export const getAllDoctorsCurrentStatus = async () => {
     const response = await axiosClient.get("/doctor/current-status")
-    console.log(response)
     return response.data.doctorStatusData
 }

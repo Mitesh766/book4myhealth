@@ -44,13 +44,13 @@ export const PatientCard = ({
     <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-gray-800">
       <button
         onClick={() => onEdit(patient)}
-        className="p-2 text-yellow-400 hover:text-yellow-300 hover:bg-gray-800 rounded-full transition-colors"
+        className="p-2 cursor-pointer text-yellow-400 hover:text-yellow-300 hover:bg-gray-800 rounded-full transition-colors"
       >
         <Edit className="w-5 h-5" />
       </button>
       <button
         onClick={() => onDelete(patient.id)}
-        className="p-2 text-red-500 hover:text-red-400 hover:bg-gray-800 rounded-full transition-colors"
+        className="p-2 text-red-500 cursor-pointer hover:text-red-400 hover:bg-gray-800 rounded-full transition-colors"
       >
         <Trash2 className="w-5 h-5" />
       </button>

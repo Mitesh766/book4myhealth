@@ -19,11 +19,8 @@ export const addDoctor = asyncHandler(async (req, res) => {
 
 export const updateDoctorProfile = asyncHandler(async (req, res) => {
     const doctorInputData = updateDoctorProfileSchema.parse(req.body);
-    console.log(doctorInputData)
     const clinicId = req.customUser?.clinicId!;
-    console.log(clinicId)
     const updatedDoctorData = await doctorService.updateDoctorProfile(doctorInputData, clinicId)
-    console.log(updatedDoctorData)
     return res.json({
         success: true,
         message: "Doctor details updated successfully",

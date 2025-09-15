@@ -89,7 +89,7 @@ export const DoctorAvailabilityModal = ({
                   delete newAvailability[day];
                   setAvailabilityData(newAvailability);
                 }}
-                className="text-red-400 hover:text-red-300 text-sm"
+                className="text-red-400 cursor-pointer hover:text-red-300 text-sm"
               >
                 Clear
               </button>
@@ -101,16 +101,22 @@ export const DoctorAvailabilityModal = ({
       <div className="flex gap-3 justify-end pt-4 border-t border-gray-700">
         <button
           onClick={() => setIsOpen(false)}
-          className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+          className="px-6 py-2 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
         >
           Cancel
         </button>
         <button
-          // onClick={() => handleSubmit("editAvailability")}
           onClick={() => updateAvailabilityMutation.mutate()}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className={`px-6 py-2   bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${updateAvailabilityMutation.isPending?"cursor-not-allowed":"cursor-pointer"}`}
         >
-          Update Availability
+          {updateAvailabilityMutation.isPending ? (
+            <>
+              <span className=" inline-block mr-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              Updating...
+            </>
+          ) : (
+            "Update"
+          )}
         </button>
       </div>
     </div>

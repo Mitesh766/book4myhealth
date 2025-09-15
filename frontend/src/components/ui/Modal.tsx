@@ -8,7 +8,6 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, setIsOpen, title, children }: ModalProps) => {
-    console.log(isOpen)
   if (!isOpen) return null;
 
   return (

@@ -1,10 +1,13 @@
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock} from "lucide-react";
 
 export const ScheduledAppointments = ({
   scheduledAppointments,
   onCheckIn,
   onCancel,
   setSelectedAppointmentId,
+  isCheckInPending,
+  isCancellationPending,
+  selectedAppointmentId
 }: any) => {
   return (
     <div className="bg-black-600/50 mb-10 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl">
@@ -57,7 +60,18 @@ export const ScheduledAppointments = ({
                   }}
                   className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors duration-200 text-sm font-medium"
                 >
-                  Check In
+                {selectedAppointmentId === appointment.id &&
+                  isCheckInPending ? (
+                    <>
+                      <span className="inline-block w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                      Checking In...
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <span>CheckIn</span>
+                    </>
+                  )}
                 </button>
 
                 <button
@@ -67,7 +81,19 @@ export const ScheduledAppointments = ({
                   }}
                   className="bg-red-600 cursor-pointer hover:bg-red-700 text-white px-3 py-1 rounded-lg transition-colors duration-200 text-sm font-medium"
                 >
-                  Cancel
+                  {selectedAppointmentId === appointment.id &&
+                  isCancellationPending ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                      Cancelling...
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      
+                      Cancel
+                    </>
+                  )}
                 </button>
               </div>
             </div>

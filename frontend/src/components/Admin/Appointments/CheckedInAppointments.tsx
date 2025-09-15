@@ -6,6 +6,9 @@ export const CheckedInAppointments = ({
   setSelectedAppointmentId,
   onComplete,
   onCancel,
+  isCompletionPending,
+  isCancellationPending,
+  selectedAppointmentId,
 }: any) => {
   return (
     <div className="bg-black-600/50 backdrop-blur-sm mb-10 rounded-2xl border border-gray-700/50 shadow-2xl">
@@ -65,8 +68,19 @@ export const CheckedInAppointments = ({
                   }}
                   className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors duration-200 text-sm font-medium flex items-center space-x-1"
                 >
-                  <Check className="w-3 h-3" />
-                  <span>Complete</span>
+                  {selectedAppointmentId === appointment.id &&
+                  isCompletionPending ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                      Completing...
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <Check className="w-3 h-3" />
+                      <span>Complete</span>
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={() => {
@@ -75,8 +89,19 @@ export const CheckedInAppointments = ({
                   }}
                   className="bg-orange-600 cursor-pointer hover:bg-red-700 text-white px-3 py-1 rounded-lg transition-colors duration-200 text-sm font-medium flex items-center space-x-1"
                 >
-                  <X className="w-3 h-3" />
-                  <span>Cancel</span>
+                  {selectedAppointmentId === appointment.id &&
+                  isCancellationPending ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                      Cancelling...
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <X className="w-3 h-3" />
+                      <span>Cancel</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

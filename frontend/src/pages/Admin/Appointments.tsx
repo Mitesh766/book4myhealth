@@ -22,8 +22,8 @@ export const Appointments = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["appointments", doctorId],
     queryFn: () => getAllAppointmentsDoctorWise(doctorId!),
-    gcTime: 1000 * 60 * 60,
-    staleTime: 1000 * 60 * 60,
+    gcTime: 1000* 60 * 5,
+    staleTime: 1000 * 60 * 5,
   });
 
   const doctor = data?.doctorDetails;
@@ -165,6 +165,7 @@ export const Appointments = () => {
     },
   });
 
+
   const onCheckIn = () => {
     checkInMutation.mutate();
   };
@@ -242,7 +243,10 @@ export const Appointments = () => {
           scheduledAppointments={scheduledAppointments}
           onCheckIn={onCheckIn}
           onCancel={onCancel}
+          isCheckInPending={checkInMutation.isPending}
+          isCancellationPending={cancelMutation.isPending}
           setSelectedAppointmentId={setSelectedAppointmentId}
+          selectedAppointmentId={selectedAppointmentId}
         />
 
         {/* Queue Section */}
@@ -251,7 +255,10 @@ export const Appointments = () => {
           getTypeColor={getTypeColor}
           onComplete={onComplete}
           onCancel={onCancel}
+          isCompletionPending = {completeMutation.isPending}
+          isCancellationPending = {cancelMutation.isPending}
           setSelectedAppointmentId={setSelectedAppointmentId}
+          selectedAppointmentId={selectedAppointmentId}
         />
         {/* Completed Section */}
         <CompletedAppointments

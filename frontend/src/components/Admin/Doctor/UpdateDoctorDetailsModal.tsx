@@ -174,11 +174,11 @@ export const UpdateDoctorDetailsModal = ({
         <button
           onClick={() => updateDoctorDetailsMutation.mutate()}
           disabled={updateDoctorDetailsMutation.isPending}
-          className={`px-6 cursor-pointer py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-colors
+          className={`px-6  py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-colors
     ${
       updateDoctorDetailsMutation.isPending
         ? "bg-gray-400 cursor-not-allowed"
-        : "bg-blue-600 hover:bg-blue-700"
+        : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
     }
   `}
         >

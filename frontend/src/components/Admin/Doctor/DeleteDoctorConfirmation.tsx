@@ -40,7 +40,7 @@ export const DeleteDoctorConfirmation = ({
       message="Are you sure you want to delete the doctor data"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      isPending={deleteMutation.isPending}
     />
   );
 };
-

@@ -37,9 +37,9 @@ export const UpdatePatientModal = ({
         }
       );
       showNotification("success", ["Patient Data updated successfully"]);
-      setTimeout(()=>{
-          setIsModalOpen(false);
-        },1000)
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 1000);
     },
     onError: (err: any) => {
       showNotification("error", err.response.data.message);
@@ -54,7 +54,7 @@ export const UpdatePatientModal = ({
         onClose={hideNotification}
         isVisible={notification.isVisible}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Patient Name
@@ -104,7 +104,6 @@ export const UpdatePatientModal = ({
             <option value="Other">Other</option>
           </select>
         </div>
-      </div>
       <div className="w-full">
         <label className="block text-sm font-medium text-gray-300 mb-2">
           Address

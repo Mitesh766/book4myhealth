@@ -214,7 +214,7 @@ export const Doctors = () => {
           />
         </Modal>
       )}
-
+      
       {isDeleteConfirmationOpen && (
         <DeleteDoctorConfirmation
           isOpen={isDeleteConfirmationOpen}
