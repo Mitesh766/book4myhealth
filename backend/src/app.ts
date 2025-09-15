@@ -8,11 +8,11 @@ import userRouter from "./modules/user/user.routes"
 import doctorRouter from "./modules/doctor/doctor.routes"
 import patientRouter from "./modules/patient/patient.routes"
 import appointmentRouter from "./modules/appointment/appointment.routes"
-import moment from "moment-timezone"
 const app = express()
 
+
 app.use(cors({
-    origin: ["http://localhost:5173", "https://api.book4myhealth.info"],
+    origin: ["http://localhost:5173", "https://book4myhealth.info"],
     credentials: true
 }))
 
