@@ -15,7 +15,7 @@ const FrontDesk = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-slate-950 p-6">
+    <div className="min-h-screen bg-gradient-to-br bg-slate-950 p-6 px-15">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -41,7 +41,7 @@ const FrontDesk = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {doctorData?.map((doctor: any) => {
               return (
                 <div
