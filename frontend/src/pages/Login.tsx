@@ -24,7 +24,7 @@ export function Login() {
   const { data: userLoggedInStatus } = useVerifyAuth();
   useEffect(() => {
     if (userLoggedInStatus?.success) {
-      navigate(`/home`, { replace: true });
+      navigate(`/admin/frontdesk`, { replace: true });
     }
   }, [userLoggedInStatus, navigate]);
 
