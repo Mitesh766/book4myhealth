@@ -204,23 +204,23 @@ export const Appointments = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white mb-1">
-                  {doctor.name}
+                  {doctor?.name}
                 </h1>
-                <p className="text-gray-400 text-lg">{doctor.specialisation}</p>
+                <p className="text-gray-400 text-lg">{doctor?.specialisation}</p>
                 <div className="flex items-center space-x-4 mt-2">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                      doctor.available
+                      doctor?.available
                         ? "bg-green-500/20 text-green-400"
                         : "bg-red-500/20 text-red-400"
                     }`}
                   >
                     <div
                       className={`w-2 h-2 rounded-full mr-2 ${
-                        doctor.available ? "bg-green-400" : "bg-red-400"
+                        doctor?.available ? "bg-green-400" : "bg-red-400"
                       }`}
                     ></div>
-                    {doctor.available ? "Available" : "Not Available"}
+                    {doctor?.available ? "Available" : "Not Available"}
                   </span>
                 </div>
               </div>

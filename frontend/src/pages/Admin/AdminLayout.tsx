@@ -1,17 +1,11 @@
-import {
-
-  Calendar,
-
-  Computer,
-
-  UserCheck,
-  Users,
-} from "lucide-react";
+import { Calendar, Computer, UserCheck, Users } from "lucide-react";
 import { Sidebar } from "../../components/ui";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useVerifyAuth } from "../../hooks/useVerifyAuth";
 
 export const AdminLayout = () => {
+  const { isError } = useVerifyAuth();
   const [currentPath, setCurrentPath] = useState("/appointments");
   interface SidebarOption {
     label: string;
@@ -20,6 +14,7 @@ export const AdminLayout = () => {
   }
 
   const navigate = useNavigate();
+
   const handleNavigate = (path: string) => {
     setCurrentPath(path);
     navigate(`${path}`);
@@ -39,12 +34,12 @@ export const AdminLayout = () => {
       path: "add-appointment",
       icon: <Calendar size={18} />,
     },
-    
-  
   ];
-  return (
+  return isError ? (
+    <Navigate to={"/login"} />
+  ) : (
     <div>
-      <Outlet/>
+      <Outlet />
       <Sidebar
         options={sidebarOptions}
         currentPath={currentPath}
