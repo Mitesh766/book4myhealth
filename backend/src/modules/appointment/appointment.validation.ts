@@ -42,6 +42,14 @@ export const createAppointmentSchema = z.object({
                 code: "custom"
             })
         }
+
+        if(data.start && data.start < new Date()){
+            ctx.addIssue({
+                path:["start"],
+                message:"Start time must be greater then todays",
+                code:"custom"
+            })
+        }
         if (data.start && data.end) {
             if (data.start >= data.end) {
                 ctx.addIssue({

@@ -83,7 +83,7 @@ model Patient {
   clinic       Clinic        @relation(fields: [clinicId], references: [id], onDelete: Restrict)
   appointments Appointment[]
   reports      Report[]
-
+ 
   @@unique([clinicId, customId])
   @@index([clinicId])
 }

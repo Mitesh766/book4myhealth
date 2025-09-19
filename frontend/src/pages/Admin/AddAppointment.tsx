@@ -240,6 +240,7 @@ export const AddAppointment = () => {
                   type="datetime-local"
                   value={appointment.start}
                   onChange={(e) => handleInputChange("start", e.target.value)}
+                  min={new Date().toISOString().slice(0, 16)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>

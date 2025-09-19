@@ -16,6 +16,7 @@ import {
 import { Loader, Notification } from "../../components/ui";
 import { useNotification } from "../../hooks/useNotification";
 
+
 export const Appointments = () => {
   const [searchParams] = useSearchParams();
   const doctorId = searchParams.get("doctorId");
@@ -37,6 +38,7 @@ export const Appointments = () => {
     const checkedInOrWithDoctorAppointments: any[] = [];
     const scheduledAppointments: any[] = [];
 
+    
     appointmentData?.forEach((appt: any) => {
       const { status, completeTime, cancelTime, checkInTime, start, ...rest } =
         appt;
@@ -102,6 +104,7 @@ export const Appointments = () => {
         return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
+
   const queryClient = useQueryClient();
   const checkInMutation = useMutation({
     mutationFn: () => setAppointmentCheckedIn(selectedAppointmentId),
